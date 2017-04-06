@@ -7,16 +7,16 @@ public class Playground {
 	
 	static int numOfBots;
 	static Bot[][] table;
-	static boolean[][] goal;
-	
+	static Bot[][] goal;
+	static Bot[] bots;
 	
 	
 	
 	public Playground(int _numOfBots){
 		
 		table = new Bot[_numOfBots][_numOfBots];
-		goal = new boolean[_numOfBots][_numOfBots];
-		
+		goal = new Bot[_numOfBots][_numOfBots];
+		bots = new Bot[_numOfBots];
 		
 		numOfBots = _numOfBots;
 		
@@ -30,8 +30,11 @@ public class Playground {
 			yAxis = rand.nextInt(numOfBots);
 			
 			if (table[xAxis][yAxis] == null){
-				table[xAxis][yAxis] = new Bot();
-				
+				Bot bot = new Bot("*");
+				bot.xPos = xAxis;
+				bot.yPos = yAxis;
+				table[xAxis][yAxis] = bot;
+				bots[placedBots] = bot;
 				
 				placedBots++;
 			}						
@@ -40,10 +43,10 @@ public class Playground {
 	}
 	
 	public static void printTable() {
-	    for (int x=0; x<numOfBots; x++){	    	
-	    	for (int y=0; y<numOfBots; y++){
+	    for (int y=0; y<numOfBots; y++){	    	
+	    	for (int x=0; x<numOfBots; x++){
 		    	if(table[x][y] != null){
-		    		System.out.print("*  ");
+		    		System.out.print(table[x][y].sign+"  ");
 		    	} else {
 		    		System.out.print("-  ");
 		    	}
@@ -59,8 +62,8 @@ public class Playground {
 	public static void printGoal() {
 	    for (int x=0; x<numOfBots; x++){	    	
 	    	for (int y=0; y<numOfBots; y++){
-		    	if(goal[x][y] == true){
-		    		System.out.print("o  ");
+		    	if(goal[x][y] != null){
+		    		System.out.print(goal[x][y].toString()+"  ");
 		    	} else {
 		    		System.out.print("-  ");
 		    	}
@@ -86,7 +89,7 @@ public class Playground {
 		
 		for (int x=startingPoint; x<startingPoint+blockSize; x++){	    	
 	    	for (int y=startingPoint; y<startingPoint+blockSize; y++){
-		    	goal[x][y]=true;		    		
+		    	goal[x][y]=new Bot("o");		    		
 		    }	
 	    	System.out.println("");
 	    }	
@@ -97,7 +100,7 @@ public class Playground {
 		return table;
 	}
 	
-	public boolean[][] getGoal(){
+	public Bot[][] getGoal(){
 		return goal;
 	}
 
