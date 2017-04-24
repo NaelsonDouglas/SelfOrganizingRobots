@@ -32,7 +32,7 @@ public class Playground {
 			yAxis = rand.nextInt(numOfBots);
 			
 			if (table[xAxis][yAxis] == null){
-				Bot bot = new Bot("*");
+				Bot bot = new Bot(Integer.toString(placedBots));
 				bot.xPos = xAxis;
 				bot.yPos = yAxis;
 				table[xAxis][yAxis] = bot;
@@ -44,10 +44,14 @@ public class Playground {
 		}
 	}
 	
-	public void confirmAllGoals(){
-		for (Bot i : bots){
-			i.confirmGoal(goal);
+	
+	
+	public boolean confirmAllGoals(){
+		for (int x = 0; x < bots.length; x++){				
+			if(!bots[x].confirmGoal(goal))
+				return false;
 		}
+		return true;
 	}
 	
 	public static void printTable() {

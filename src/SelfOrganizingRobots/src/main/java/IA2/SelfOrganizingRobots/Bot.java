@@ -79,20 +79,15 @@ public Bot  right(Playground p){
 
 
 	public void moveY(Playground p){
-		if (up(p) == null){
-			System.out.println("Moveu DIreita");
+		if (up(p) == null){			
 			move("UP",p);
-		} else if (down(p) == null) {
-			System.out.println("Moveu DIreita");
-			move("DOWN",p);
-		}
+		} else if (down(p) == null) {			
+			move("DOWN",p);		}
 	}
 	public void moveX(Playground p){
-		if (left(p) == null){
-			System.out.println("Moveu DIreita");
+		if (left(p) == null){			
 			move("LEFT",p);
-		} else if (right(p) == null) {
-			System.out.println("Moveu DIreita");
+		} else if (right(p) == null) {			
 			move("RIGHT",p);
 		}
 	}
@@ -218,9 +213,64 @@ public Bot  right(Playground p){
 		yTarget = yPos;
 	}
 	
+public boolean isGoal(Playground p, String direction, Bot bot){
+		Bot[][] goal=p.goal;
+		try{
+			if (direction.toUpperCase() == "UP"){
+				return goal[bot.xPos][bot.yPos+1] != null;}
+			if (direction.toUpperCase() == "DOWN"){
+				return goal[bot.xPos][bot.yPos-1] != null;}
+			if (direction.toUpperCase() == "LEFT"){
+				return goal[bot.xPos-1][bot.yPos] != null;}
+			if (direction.toUpperCase() == "RIGHT"){
+				return goal[bot.xPos+1][bot.yPos] != null;}
+			else{
+					return false;
+				}
+			
+		}catch(Error e){
+			System.out.println("Não há objetivos próximos");
+			return false;
+		}
+		
+	}
+	
+	private boolean swapGoal(Playground p, Bot neighboor){
+		if (done){
+			
+			boolean movUp = false, movDown = false, movLeft = false, movRight = false;
+			if(isGoal(p, "UP", neighboor)){
+				neighboor.move("UP", p);
+				movUp = true;
+				
+			};
+			
+			if(isGoal(p, "DOWN", neighboor)){
+				neighboor.move("DOWN", p);
+				movDown = true;
+			};
+			
+			if(isGoal(p, "LEFT", neighboor)){
+				neighboor.move("LEFT", p);
+				movLeft = true;
+			};
+			
+			if(isGoal(p, "RIGHT", neighboor)){
+				neighboor.move("RIGHT", p);
+				movRight = true;
+			};
+			
+			return (movUp || movDown || movRight || movLeft);
+			
+			
+		}
+		return false;
+	}
+	
 	public boolean findGoal(Playground p){
 		Bot[] goalHolders = p.goalHolders;
 		boolean lefttMov, rightMov, downMov = false, upMov = false;
+		
 		
 		
 		
@@ -255,17 +305,38 @@ public Bot  right(Playground p){
 						System.out.println("ENTALOU");
 						if (yPos == i.yPos){
 							if (xPos < i.xPos){
-								getOut(p, "RIGHT");
+								//getOut(p, "RIGHT");
+								if(!swapGoal(p, right(p))){
+									right(p).moveY(p);
+									move("RIGHT", p);
+									findGoal(p);
+								}
+								
 							} else if (xPos > i.xPos){
-								getOut(p, "LEFT");
+								//getOut(p, "LEFT");
+								if(!swapGoal(p, left(p))){
+									left(p).moveY(p);
+									move("LEFT", p);
+									findGoal(p);
+								}
 							}
 						}
 						
 						if (xPos == i.xPos){
 							if (yPos < i.yPos){
-								getOut(p, "UP");
+								//getOut(p, "UP");
+								if(!swapGoal(p, up(p))){
+									up(p).moveX(p);
+									move("UP", p);
+									findGoal(p);
+								}
 							} else if (yPos > i.yPos){
-								getOut(p, "DOWN");
+								//getOut(p, "DOWN");
+								if(!swapGoal(p, down(p))){
+									down(p).moveX(p);
+									move("down", p);
+									findGoal(p);
+								}
 							}
 						}						
 					}					
