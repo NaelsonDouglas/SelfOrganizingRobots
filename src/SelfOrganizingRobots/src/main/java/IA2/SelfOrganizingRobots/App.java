@@ -12,21 +12,30 @@ public class App
         
         
         Playground p = new Playground(4);
-        p.setGoal("whatever essa string não faz efeito ainda, mas vou manter a assinatura do método com ela para uma atualização futura");
+        
+        p.setGoal(new int[]{0,0,1,0,0,1,0,0,0,0,1,1,0,0,0,0});
         
         
         
         p.bots[1].sign = "x";
         Bot ponta = p.bots[1];
         
-        System.out.println(ponta.yPos);
-        p.printTable();
         
-        ponta.move("UP", p);
+        p.printGoal();
+        p.printTable();        
         
-        p.printTable();
+        
+        
+        ponta.findGoal(p);
+        
+        for (Bot i : p.bots){
+        		i.findGoal(p);
+        }
+        
+        p.printTable();   
        
-       
+      
+        p.printGoal();
        	
     }
 }

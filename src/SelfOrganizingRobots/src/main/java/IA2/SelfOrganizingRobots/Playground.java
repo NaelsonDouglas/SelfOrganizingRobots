@@ -9,6 +9,7 @@ public class Playground {
 	static Bot[][] table;
 	static Bot[][] goal;
 	static Bot[] bots;
+	static Bot[] goalHolders;
 	
 	
 	
@@ -17,6 +18,7 @@ public class Playground {
 		table = new Bot[_numOfBots][_numOfBots];
 		goal = new Bot[_numOfBots][_numOfBots];
 		bots = new Bot[_numOfBots];
+		goalHolders = new Bot[_numOfBots];	
 		
 		numOfBots = _numOfBots;
 		
@@ -42,6 +44,12 @@ public class Playground {
 		}
 	}
 	
+	public void confirmAllGoals(){
+		for (Bot i : bots){
+			i.confirmGoal(goal);
+		}
+	}
+	
 	public static void printTable() {
 	    for (int y=numOfBots-1; y>=0; y--){	    	
 	    	for (int x=0; x<numOfBots; x++){
@@ -59,9 +67,14 @@ public class Playground {
 	}
 	
 	
+
+	
+	
+
+	
 	public static void printGoal() {
-	    for (int x=0; x<numOfBots; x++){	    	
-	    	for (int y=0; y<numOfBots; y++){
+	    for (int y=numOfBots-1; y>=0; y--){	    	
+	    	for (int x=0; x<numOfBots; x++){
 		    	if(goal[x][y] != null){
 		    		System.out.print(goal[x][y].toString()+"  ");
 		    	} else {
@@ -75,24 +88,50 @@ public class Playground {
 	    System.out.println("\n\n");
 	}
 	
+	public boolean isOcupied(int x,int y){
+		if (table[x][y] != null){
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
 	
 	
-	public void setGoal(String _goal){
+	
+	public void setGoal(int[] _goal){
+		int character = 0;
+		int placedHolders = 0;
+		goal = new Bot[numOfBots][numOfBots];
+		
+	
+		
+		
+		
+		
+		
 		int blockSize = (int) Math.sqrt(numOfBots);
 		
 		Random rand = new Random();
 		int startingPoint = rand.nextInt(numOfBots-blockSize);
-				
+		
 				
 		System.out.println("Starting point: "+startingPoint);
 		
 		for (int x=startingPoint; x<startingPoint+blockSize; x++){	    	
 	    	for (int y=startingPoint; y<startingPoint+blockSize; y++){
-		    	goal[x][y]=new Bot("o");		    		
+		    	
+	    		
+	    		goal[x][y]=new Bot("o");
+	    		goal[x][y].xPos=x;
+	    		goal[x][y].yPos=y;
+	    		
+		    	goalHolders[placedHolders] = goal[x][y];
+		    	placedHolders++;
 		    }	
 	    	System.out.println("");
 	    }	
+	    
 		
 	}
 	
