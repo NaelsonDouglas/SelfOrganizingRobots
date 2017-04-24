@@ -12,15 +12,14 @@ public class Bot {
 		sign = _sign;
 	}
 	
-	public Bot  up(Playground p){
+	public Bot  up(Playground p){		
 		
 		
-		System.out.println("Meu yPos+1: "+yPos+1+" \n meu numOfBots: "+p.numOfBots);
-		if (this.yPos+1 < p.numOfBots){
-			return p.table[xPos][yPos+1];
+		if (this.yPos+1 < p.numOfBots && p.table[xPos][yPos+1] == null){
+			return null;
 		} else {
 			System.out.println("Acima é um precipício");
-			return null;
+			return new Bot("-");
 		}			
 	}
 	
@@ -28,23 +27,36 @@ public class Bot {
 public Bot  down(Playground p){
 		
 		if (yPos-1 >= 0 ){
-			return p.table[xPos][yPos-1];
+			if (p.table[xPos][yPos-1] == null){
+				return null;
+			} else {
+				System.out.println("Abaixo está ocupado.");
+				return p.table[xPos][yPos-1];
+			}
 		} else {
 			System.out.println("Abaixo é um precipício");
-			return null;
-		}			
+			return new Bot("-");
+		}
+					
 	}
 
 
 
 public Bot  left(Playground p){
 	
-	if (xPos-1 >= 0 ){
-		return p.table[xPos-1][yPos];
+	if (xPos-1 >= 0){
+		if (p.table[xPos-1][yPos] == null){
+			return null;
+		} else {
+			System.out.println("À esquerda está ocupado.");
+			return p.table[xPos-1][yPos];
+		}
+		
 	} else {
 		System.out.println("Á esquerda é um precipício");
-		return null;
-	}			
+		return new Bot("-");
+	}
+				
 }
 
 
@@ -54,7 +66,7 @@ public Bot  right(Playground p){
 		return p.table[xPos+1][yPos];
 	} else {
 		System.out.println("Á direita é um precipício");
-		return null;
+		return new Bot("-");
 	}			
 }
 
@@ -76,35 +88,35 @@ public Bot  right(Playground p){
 		
 		switch (direction.toUpperCase()) {
 		case "DOWN":
-			if (this.down(p) != null){
+			if (this.down(p) == null){
 				yPos--;			
 				Playground.table[xPos][yPos] = this;
-				Playground.table[xPos][yPos-1] = new Bot("-");
+				Playground.table[xPos][yPos+1] = null;
 			}
 		break;
 			
 		case "UP":
-			if (this.up(p) != null){
-				yPos--;	
-				System.out.println("Acima não é nulo");
+			if (this.up(p) == null && yPos+1 < p.numOfBots){
+				yPos++;
+				
 				Playground.table[xPos][yPos] = this;
-				Playground.table[xPos][yPos+1] = new Bot("-");
+				Playground.table[xPos][yPos-1] = null;
 			}
 		break;
 		
 		case "LEFT":
-			if (this.left(p) != null){
+			if (this.left(p) == null && xPos-1 >=0){
 				xPos--;
 				Playground.table[xPos][yPos] = this;
-				Playground.table[xPos+1][yPos] = new Bot("-");
+				Playground.table[xPos+1][yPos] = null;
 			}
 		break;
 		
 		case "RIGHT":
-			if (this.right(p) != null){
+			if (this.right(p) == null && xPos+1 < p.numOfBots){
 				xPos++;
 				Playground.table[xPos][yPos] = this;
-				Playground.table[xPos-1][yPos] = new Bot("-");
+				Playground.table[xPos-1][yPos] = null;
 			}
 		break;
 			

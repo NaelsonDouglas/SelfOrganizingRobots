@@ -43,7 +43,7 @@ public class Playground {
 	}
 	
 	public static void printTable() {
-	    for (int y=0; y<numOfBots; y++){	    	
+	    for (int y=numOfBots-1; y>=0; y--){	    	
 	    	for (int x=0; x<numOfBots; x++){
 		    	if(table[x][y] != null){
 		    		System.out.print(table[x][y].sign+"  ");

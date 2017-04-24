@@ -21,35 +21,12 @@ public class App
         
         System.out.println(ponta.yPos);
         p.printTable();
-        //p.printGoal();
         
-        ponta.move("UP",p);  
-        ponta.up(p);
-        ponta.down(p);
+        ponta.move("UP", p);
+        
         p.printTable();
-        
-        
-        
-        
-        ponta.move("DOWN",p);
-        ponta.up(p);
-        ponta.down(p);
-        ponta.left(p);
-        ponta.right(p);
-        p.printTable();
-        
-        
-        
-        ponta.move("LEFT",p);
-        ponta.up(p);
-        ponta.down(p);
-        p.printTable();
-        
-        ponta.move("RIGHT",p);
-        ponta.up(p);
-        ponta.down(p);
-        p.printTable();
-        
+       
+       
        	
     }
 }
