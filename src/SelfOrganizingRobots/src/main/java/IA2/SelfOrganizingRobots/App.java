@@ -1,5 +1,8 @@
 package IA2.SelfOrganizingRobots;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * Hello world!
  *
@@ -8,7 +11,9 @@ public class App
 {
     public static void main( String[] args )
     {
-        
+
+    	
+    	
         
         
         Playground p = new Playground(4);
@@ -17,25 +22,30 @@ public class App
         
         
         
-        p.bots[1].sign = "x";
-        Bot ponta = p.bots[1];
         
         
-        p.printGoal();
-        p.printTable();        
+        //System.out.println("Acabou");
+        p.printBots();   
+        
+        System.out.println();
+        p.printSpots();
+        
+        p.spots[1].callBot(p, p.bots);
         
         
         
-        ponta.findGoal(p);
+     
         
-        for (Bot i : p.bots){
-        		i.findGoal(p);
-        }
         
-        p.printTable();   
+            
+        
+        
+        
        
-      
-        p.printGoal();
+        
+        
+        
+
        	
     }
 }
