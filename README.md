@@ -1,7 +1,7 @@
 # SelfOrganizingRobots
 
 It's a simulation of the self assembly robots from Havard University. 
-The table is a matrix and the robots are just characters. The only purpose of this code is to reproduce the artificial inteligence part in a low budget way (I have no money for the robots. :) )
+The table is a matrix and the robots are just characters. The only purpose of this code is to reproduce the artificial inteligence(multi-agent systems, especially) part in a low budget way (I have no money for the robots. :) )
 
 (Click the image to see the original self assemblying robot system)
 
