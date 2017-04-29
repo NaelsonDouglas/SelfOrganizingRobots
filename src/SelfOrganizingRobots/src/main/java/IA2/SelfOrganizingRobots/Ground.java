@@ -7,6 +7,10 @@ public class Ground extends Agent {
 		ground = true;
 		// 
 	}
+	
+	
+	
+	
 
 	
 

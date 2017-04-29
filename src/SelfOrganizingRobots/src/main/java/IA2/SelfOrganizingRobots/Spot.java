@@ -17,21 +17,8 @@ public class Spot extends Agent{
 	
 	public void callBot(Playground p,Bot[] bots){
 		
-		
-		foundBot = false;
-		
-		for (Bot bot : bots){			
-				if(!foundBot){
-					routeToMe = new LinkedList<>();
-					bot.findRoute(p, this, routeToMe);
-				}
-			}
-		
-			while(routeToMe.size() > 0){
-				System.out.println("teste");
-				System.out.println(routeToMe.poll());
-			}
-		}
+	
+	}
 	
 	
 		

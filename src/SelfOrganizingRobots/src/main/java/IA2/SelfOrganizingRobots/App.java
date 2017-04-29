@@ -9,6 +9,9 @@ import java.util.Queue;
  */
 public class App 
 {
+	
+	
+		
     public static void main( String[] args )
     {
 
@@ -28,9 +31,15 @@ public class App
         p.printBots();   
         
         System.out.println();
-        p.printSpots();
+       // p.printSpots();
         
         p.spots[1].callBot(p, p.bots);
+        
+        p.bots[0].startPathCalc(p, 4, 4);
+        
+        
+        
+        
         
         
         
