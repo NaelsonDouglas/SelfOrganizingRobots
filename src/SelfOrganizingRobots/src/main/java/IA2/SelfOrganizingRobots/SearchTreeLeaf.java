@@ -84,13 +84,28 @@ public class SearchTreeLeaf extends Cell {
 	
 	public void markVisited(){
 		visited = true;
-		sign = "*";
+		sign = "0";
 	}
 	
 	public void markVisited(SearchTreeLeaf _father){
 		visited = true;
 		sign = "*";
 		father = _father;
+		
+		/*
+		
+		if (_father.xPos > xPos){
+			sign = "R";
+		} else if (_father.xPos < xPos){
+			sign = "L";
+		}
+		
+		
+		if (_father.yPos > yPos){
+			sign = "U";
+		} else if (_father.yPos < yPos){
+			sign = "D";
+		}*/
 	}
 			
 	

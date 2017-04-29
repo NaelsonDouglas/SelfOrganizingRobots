@@ -21,10 +21,12 @@ public class Playground {
 		
 		for (int y=0; y<_numOfBots; y++){
 			for (int x=0; x<_numOfBots; x++){
-				botsTable[x][y] = new Ground("-");
+				botsTable[x][y] = new Ground("-",x,y);
 				
 			}
 		}
+		
+		
 		
 		bots = new Bot[_numOfBots];
 		spots = new Spot[_numOfBots];	

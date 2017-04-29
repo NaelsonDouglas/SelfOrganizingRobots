@@ -8,6 +8,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 
+import org.omg.CORBA.PRIVATE_MEMBER;
+
 public class Bot extends Agent{
 	
 	
@@ -42,7 +44,17 @@ private int calcMinDistance(int targetX, int targetY){
 }
 
 
-public String[] startPathCalc(Playground p, int targetX, int targetY){
+
+public boolean isReachable(SearchTreeLeaf tree[][], int targetX, int targetY){
+	
+	if (tree[targetX][targetY].visited){
+		tree[targetX][targetX].sign = "X";
+		System.out.println("Chegou");
+	}
+	return tree[targetX][targetY].visited;
+}
+
+public String calcPath(Playground p, int targetX, int targetY){
 	
 	
 	SearchTreeLeaf tree[][] = new SearchTreeLeaf[p.numOfBots][p.numOfBots];
@@ -60,32 +72,54 @@ public String[] startPathCalc(Playground p, int targetX, int targetY){
 	
 	//Searching the first line ---->
 	
-		for (int x=xPos-1; x>=0; x--){ //starts in the left side of the bot
-			SearchTreeLeaf previousLeaf = tree[x+1][yPos];
-			SearchTreeLeaf currentLeaf = tree[x][yPos];
-			if (previousLeaf.visited && currentLeaf.isGround()){
-				currentLeaf.markVisited();
-				currentLeaf.father = previousLeaf;
-			} else {
-				break;
+		
+			for (int x=xPos-1; x>=0; x--){ //starts in the left side of the bot
+				SearchTreeLeaf previousLeaf = tree[x+1][yPos];
+				SearchTreeLeaf currentLeaf = tree[x][yPos];
+				
+				if (isReachable(tree, targetX, targetY)){
+					printTree(p, tree);
+					return "abc";
+				}
+				
+				if (previousLeaf.visited && currentLeaf.isGround()){
+					currentLeaf.markVisited(previousLeaf);
+					currentLeaf.father = previousLeaf;
+				} else {
+					break;
+				}
+				
+				
+				
 			}
-		}
 		
 		
 		
 		
-		
-		for (int x=xPos+1; x<p.numOfBots; x++){ //completes de line by sliding to the right side
-			SearchTreeLeaf previousLeaf = tree[x-1][yPos];
-			SearchTreeLeaf currentLeaf = tree[x][yPos];
-			if (previousLeaf.visited && currentLeaf.isGround()){
-				currentLeaf.markVisited();
-				currentLeaf.father = previousLeaf;
-			} else {
-				break;
+		 //completes de line by sliding to the right side
+		if (!isReachable(tree, targetX, targetY)){
+			for (int x=xPos+1; x<p.numOfBots; x++){
+				SearchTreeLeaf previousLeaf = tree[x-1][yPos];
+				SearchTreeLeaf currentLeaf = tree[x][yPos];
+				if (previousLeaf.visited && currentLeaf.isGround()){
+					currentLeaf.markVisited(previousLeaf);
+					currentLeaf.father = previousLeaf;
+					
+					if (isReachable(tree, targetX, targetY)){
+						printTree(p, tree);
+						return "abc";
+					}
+				} else {
+					break;
+				}
+				
 			}
+		} else {
+			printTree(p, tree);
+			return "abc";
 		}
 		// <-----Stops Searching the first line		
+		
 		
 		
 		//Start sliding bot
@@ -93,11 +127,19 @@ public String[] startPathCalc(Playground p, int targetX, int targetY){
 			// to the left side
 			for (int x=xPos; x>=0; x--){				
 				visitLeaf(p, tree, x, y);
+				if (isReachable(tree, targetX, targetY)){
+					printTree(p, tree);
+					return "abc";
+				}
 			}			
 			
 			// to the right side
 			for (int x=xPos+1; x<p.numOfBots; x++){ 
 				visitLeaf(p, tree, x, y);
+				if (isReachable(tree, targetX, targetY)){
+					printTree(p, tree);
+					return "abc";
+				}
 			}
 		}		
 		
@@ -105,11 +147,19 @@ public String[] startPathCalc(Playground p, int targetX, int targetY){
 			// to the left side
 			for (int x=xPos; x>=0; x--){				
 				visitLeaf(p, tree, x, y);
+				if (isReachable(tree, targetX, targetY)){
+					printTree(p, tree);
+					return "abc";
+				}
 			}			
 			
 			// to the right side
 			for (int x=xPos+1; x<p.numOfBots; x++){ 
 				visitLeaf(p, tree, x, y);
+				if (isReachable(tree, targetX, targetY)){
+					printTree(p, tree);
+					return "abc";
+				}
 			}
 		}
 		
@@ -119,6 +169,16 @@ public String[] startPathCalc(Playground p, int targetX, int targetY){
 		
 		
 		
+	
+	
+	
+	
+	
+	return null;
+}
+
+private void printTree(Playground p, SearchTreeLeaf tree[][]){
+	
 	System.out.println("\n\n ------");
 	for (int iy = p.numOfBots-1; iy >= 0; iy--){
     	for (int ix = 0; ix < p.numOfBots; ix++){
@@ -127,11 +187,8 @@ public String[] startPathCalc(Playground p, int targetX, int targetY){
     	System.out.println("");
     }
 	
-	
-	
-	
-	return null;
 }
+
 
 
 	public void visitLeaf(Playground p, SearchTreeLeaf tree[][], int x, int y){

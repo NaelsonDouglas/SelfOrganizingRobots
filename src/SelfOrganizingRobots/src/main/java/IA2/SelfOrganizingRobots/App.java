@@ -19,7 +19,7 @@ public class App
     	
         
         
-        Playground p = new Playground(4);
+        Playground p = new Playground(16);
         
         p.setGoal(new int[]{0,0,1,0,0,1,0,0,0,0,1,1,0,0,0,0});
         
@@ -35,7 +35,8 @@ public class App
         
         p.spots[1].callBot(p, p.bots);
         
-        p.bots[0].startPathCalc(p, 4, 4);
+        p.bots[0].calcPath(p, p.spots[0].xPos, p.spots[0].yPos);
+        
         
         
         
