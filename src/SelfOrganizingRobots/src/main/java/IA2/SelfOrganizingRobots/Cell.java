@@ -15,6 +15,10 @@ public class Cell {
 	public String toString(){
 		return sign;
 	}
+	
+	public String locationtoString(){
+		return "["+Integer.toString(xPos)+","+Integer.toString(yPos)+"]";
+	}
 }
 
 

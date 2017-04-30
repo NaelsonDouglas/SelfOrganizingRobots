@@ -10,6 +10,8 @@ import java.util.Stack;
 
 import org.omg.CORBA.PRIVATE_MEMBER;
 
+import junit.framework.Protectable;
+
 public class Bot extends Agent{
 	
 	
@@ -27,6 +29,13 @@ public class Bot extends Agent{
 	public Bot(String _sign, int _numOfBots){
 		super(_sign);	
 		ground = false;
+	}
+	
+	public Bot(String _sign, int _numOfBots, int _xPos, int _yPos){
+		super(_sign);	
+		ground = false;
+		xPos = _xPos;
+		yPos = _yPos;
 	}
 	
 	
@@ -49,12 +58,15 @@ public boolean isReachable(SearchTreeLeaf tree[][], int targetX, int targetY){
 	
 	if (tree[targetX][targetY].visited){
 		tree[targetX][targetX].sign = "X";
-		System.out.println("Chegou");
+		//System.out.println("\n");
+		//System.out.println("Tentando alcançar o alvo["+targetX+","+targetY+"]\n");
+		
+		
 	}
 	return tree[targetX][targetY].visited;
 }
 
-public String calcPath(Playground p, int targetX, int targetY){
+public LinkedList<String> calcPath(Playground p, int targetX, int targetY){
 	
 	
 	SearchTreeLeaf tree[][] = new SearchTreeLeaf[p.numOfBots][p.numOfBots];
@@ -67,21 +79,25 @@ public String calcPath(Playground p, int targetX, int targetY){
 	
 	
 	tree[xPos][yPos].markVisited();
-	tree[xPos][yPos].father=null;
+	tree[xPos][yPos].father = null;
+	
+	
 	
 	
 	//Searching the first line ---->
 	
 		
 			for (int x=xPos-1; x>=0; x--){ //starts in the left side of the bot
+				if (isReachable(tree, targetX, targetY)){				
+					return printTree(p, tree,targetX,targetY);					
+				}
+				
+				
 				SearchTreeLeaf previousLeaf = tree[x+1][yPos];
 				SearchTreeLeaf currentLeaf = tree[x][yPos];
 				
-				if (isReachable(tree, targetX, targetY)){
-					printTree(p, tree);
-					return "abc";
-				}
 				
+				//TODO: Ver a redundância desse father
 				if (previousLeaf.visited && currentLeaf.isGround()){
 					currentLeaf.markVisited(previousLeaf);
 					currentLeaf.father = previousLeaf;
@@ -91,14 +107,15 @@ public String calcPath(Playground p, int targetX, int targetY){
 				
 				
 				
+				
 			}
 		
 		
 		
 		
-		 //completes de line by sliding to the right side
+		 //completes the line by sliding to the right side
 		if (!isReachable(tree, targetX, targetY)){
-			for (int x=xPos+1; x<p.numOfBots; x++){
+			for (int x = xPos+1; x < p.numOfBots; x++){
 				SearchTreeLeaf previousLeaf = tree[x-1][yPos];
 				SearchTreeLeaf currentLeaf = tree[x][yPos];
 				if (previousLeaf.visited && currentLeaf.isGround()){
@@ -106,8 +123,8 @@ public String calcPath(Playground p, int targetX, int targetY){
 					currentLeaf.father = previousLeaf;
 					
 					if (isReachable(tree, targetX, targetY)){
-						printTree(p, tree);
-						return "abc";
+						return printTree(p, tree,targetX,targetY);
+						
 					}
 				} else {
 					break;
@@ -115,21 +132,21 @@ public String calcPath(Playground p, int targetX, int targetY){
 				
 			}
 		} else {
-			printTree(p, tree);
-			return "abc";
+			return printTree(p, tree,targetX,targetY);
+			
 		}
 		// <-----Stops Searching the first line		
 		
 		
 		
 		//Start sliding bot
-		for (int y=yPos-1; y>=0; y--){
+		for (int y = yPos-1; y >= 0; y--){
 			// to the left side
 			for (int x=xPos; x>=0; x--){				
 				visitLeaf(p, tree, x, y);
 				if (isReachable(tree, targetX, targetY)){
-					printTree(p, tree);
-					return "abc";
+					return printTree(p, tree,targetX,targetY);
+					
 				}
 			}			
 			
@@ -137,8 +154,8 @@ public String calcPath(Playground p, int targetX, int targetY){
 			for (int x=xPos+1; x<p.numOfBots; x++){ 
 				visitLeaf(p, tree, x, y);
 				if (isReachable(tree, targetX, targetY)){
-					printTree(p, tree);
-					return "abc";
+					return printTree(p, tree,targetX,targetY);
+					
 				}
 			}
 		}		
@@ -148,8 +165,8 @@ public String calcPath(Playground p, int targetX, int targetY){
 			for (int x=xPos; x>=0; x--){				
 				visitLeaf(p, tree, x, y);
 				if (isReachable(tree, targetX, targetY)){
-					printTree(p, tree);
-					return "abc";
+					return printTree(p, tree,targetX,targetY);
+					
 				}
 			}			
 			
@@ -157,36 +174,72 @@ public String calcPath(Playground p, int targetX, int targetY){
 			for (int x=xPos+1; x<p.numOfBots; x++){ 
 				visitLeaf(p, tree, x, y);
 				if (isReachable(tree, targetX, targetY)){
-					printTree(p, tree);
-					return "abc";
+					return printTree(p, tree,targetX,targetY);
+					
 				}
 			}
-		}
-		
-		
-		
-		
-		
-		
-		
+		}	
+	System.out.println("Impossível encontrar rota do robô ["+xPos+","+yPos+"] até o alvo ["+targetX+","+targetY+"]");
 	
 	
-	
-	
-	
-	return null;
+	return new LinkedList<String>();
 }
 
-private void printTree(Playground p, SearchTreeLeaf tree[][]){
+private LinkedList<String> printTree(Playground p, SearchTreeLeaf tree[][], int targetX, int targetY){
 	
-	System.out.println("\n\n ------");
+	SearchTreeLeaf currentLeaf = tree[targetX][targetY];
+	String lastMove = "no_route";
+	LinkedList<String> moves = new LinkedList<String>();
+	
+	while (currentLeaf != null  && currentLeaf.isGround()){
+		SearchTreeLeaf father = currentLeaf.father;
+		
+		if (currentLeaf.father != null){
+			if (currentLeaf.xPos < father.xPos){ //if it's on left
+				lastMove = "←";
+				currentLeaf.sign = lastMove;
+			} else if (currentLeaf.xPos > father.xPos){ //if it's on left
+				lastMove = "→";
+				currentLeaf.sign = lastMove;
+			} 
+			
+			if (currentLeaf.yPos < father.yPos){ //if it's on left
+				lastMove = "↓";
+				currentLeaf.sign = lastMove;
+			} else if (currentLeaf.yPos > father.yPos){ //if it's on left
+				lastMove = "↑";
+				currentLeaf.sign = lastMove;
+			} 
+		}
+		
+		moves.addFirst(lastMove);
+		
+		
+		currentLeaf =currentLeaf.father;
+		
+		
+	}
+	
+	
+	
 	for (int iy = p.numOfBots-1; iy >= 0; iy--){
     	for (int ix = 0; ix < p.numOfBots; ix++){
-	    	System.out.print(tree[ix][iy].toString()+"  ");
+    		
+    		if(tree[ix][iy].toString()!="-")
+    			System.out.print(tree[ix][iy].toString()+"  ");
+    		else if ((p.botsTable[ix][iy].toString() != "-"))
+    			System.out.print(p.botsTable[ix][iy].toString()+"  ");
+    		else if (p.spotsTable[ix][iy].toString() == "o")
+    			System.out.print(p.spotsTable[ix][iy].toString()+"  ");
+    		else
+    			System.out.print(tree[ix][iy].toString()+"  ");
+    		 
+    			
+    		
 	    }
     	System.out.println("");
     }
-	
+	return moves;	
 }
 
 
@@ -199,35 +252,44 @@ private void printTree(Playground p, SearchTreeLeaf tree[][]){
 		SearchTreeLeaf rightLeaf = SearchTreeLeaf.getLinkedLeaf(p, tree, x, y, "RIGHT");				
 		SearchTreeLeaf leftLeaf = SearchTreeLeaf.getLinkedLeaf(p, tree, x, y, "LEFT");
 		
-		if (currentLeaf.isGround() ){
+		if (currentLeaf.isGround()){
 			
 			
-			if (topLeaf.visited){
+			if (topLeaf != null && topLeaf.visited){
 				currentLeaf.markVisited(topLeaf);
+				if (leftLeaf != null)
+					leftLeaf.revisit(currentLeaf);
+				if (rightLeaf != null)
+					rightLeaf.revisit(currentLeaf);
+				if (botLeaf != null)
+					botLeaf.revisit(currentLeaf);
 				
-				leftLeaf.revisit(currentLeaf);
-				rightLeaf.revisit(currentLeaf);
-				botLeaf.revisit(currentLeaf);
-				
-			} else if (botLeaf.visited){
+			} else if (botLeaf != null && botLeaf.visited){
 				currentLeaf.markVisited(botLeaf);
+				if (leftLeaf != null)
+					leftLeaf.revisit(currentLeaf);
+				if (rightLeaf != null)
+					rightLeaf.revisit(currentLeaf);
+				if (topLeaf != null)
+					topLeaf.revisit(currentLeaf);
 				
-				leftLeaf.revisit(currentLeaf);
-				rightLeaf.revisit(currentLeaf);
-				topLeaf.revisit(currentLeaf);
-				
-			} else if (rightLeaf.visited){
+			} else if (rightLeaf != null && rightLeaf.visited){
 				currentLeaf.markVisited(rightLeaf);
-				
-				leftLeaf.revisit(currentLeaf);
-				botLeaf.revisit(currentLeaf);
+				if (leftLeaf != null)
+					leftLeaf.revisit(currentLeaf);
+				if (botLeaf != null)
+					botLeaf.revisit(currentLeaf);
+				if (topLeaf != null)
 				topLeaf.revisit(currentLeaf);
-			} else if (leftLeaf.visited){
+			} else if (leftLeaf != null && leftLeaf.visited){
 				currentLeaf.markVisited(leftLeaf);
+				if (rightLeaf != null)
+					rightLeaf.revisit(currentLeaf);
 				
-				rightLeaf.revisit(currentLeaf);
-				botLeaf.revisit(currentLeaf);
-				topLeaf.revisit(currentLeaf);
+				if (botLeaf != null)
+					botLeaf.revisit(currentLeaf);
+				if (topLeaf != null)
+					topLeaf.revisit(currentLeaf);
 			}
 		}
 		
@@ -248,76 +310,65 @@ private void printTree(Playground p, SearchTreeLeaf tree[][]){
 
 
 
-
-
-
+public void move(Playground p, LinkedList<String> directions){
+	
+	int plusX=0;
+	int plusY=0;
 	
 	
 	
-	
-	
-	
-	
-	public boolean move(String direction, Playground p){
-		//direction == up, down, left or right
+	while(!directions.isEmpty()){		
+		String dir = directions.poll();
+		//System.out.print(dir+" ");
+		switch (dir) {
+		case "↓":
+			plusY--;
+		break;
 		
+		case "↑":
+			plusY++;
+		break;		
+		case "→":
+			plusX++;
+		break;
 		
-		switch (direction.toUpperCase()) {
-		case "DOWN":
-			if (this.down(p) == null){
-				yPos--;			
-				Playground.botsTable[xPos][yPos] = this;
-				Playground.botsTable[xPos][yPos+1] = null;
-				return true;
-			}
-			
-					
-			//System.out.println("Não pode descer");
-			return false;
-		
-		case "UP":
-			if (this.up(p) == null && yPos+1 < p.numOfBots){
-				yPos++;
-				
-				Playground.botsTable[xPos][yPos] = this;
-				Playground.botsTable[xPos][yPos-1] = null;
-				return true;
-			}
-			
-			
-		System.out.println("Não pode subir");
-		return false;
-		
-		case "LEFT":
-			if (this.left(p) == null && xPos-1 >=0){
-				xPos--;
-				Playground.botsTable[xPos][yPos] = this;
-				Playground.botsTable[xPos+1][yPos] = null;
-				return true;
-			}
-			
-			
-			System.out.println("Não pode ir à esquerda");
-		return false;
-		
-		case "RIGHT":
-			if (this.right(p) == null && xPos+1 < p.numOfBots){
-				xPos++;
-				Playground.botsTable[xPos][yPos] = this;
-				Playground.botsTable[xPos-1][yPos] = null;
-				return true;
-			}
-			
-			System.out.println("Não pode ir à direitaa");
-		return false;
-			
+		case "←":
+			plusX--;
+		break;
 
 		default:
-			return false;
+			break;
 		}
 	}
 	
 	
+	
+	int newX = xPos+plusX;
+	int newY = yPos+plusY;
+	
+	System.out.println("pos: ["+xPos+","+xPos+"]");
+	System.out.println("newpos ["+newX+","+newY+"]");
+	
+	
+	
+	p.botsTable[newX][newY] = new Bot(sign, p.numOfBots);
+	p.botsTable[xPos][yPos] = new Ground("-");
+	
+	
+	
+	xPos = newX;
+	yPos = newY;
+}
+
+
+	
+	
+	
+	
+	
+	
+	
+
 	
 
 

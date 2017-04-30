@@ -81,10 +81,13 @@ public class Playground {
 
 	
 	public static void printSpots() {
+		System.out.println("\n\n");
+		System.out.println("Possíveis alvos:");
 	    printTable(spotsTable);	
 	}
 	
 	public static void printBots() {
+		System.out.println("Posição dos robôs:");
 	    printTable(botsTable);	
 	}
 	

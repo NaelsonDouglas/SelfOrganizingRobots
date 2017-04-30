@@ -15,7 +15,7 @@ public class SearchTreeLeaf extends Cell {
 	}
 	
 	public void revisit(SearchTreeLeaf neighboor){
-		if (isGround() && !visited)
+		if (!visited && isGround())
 			markVisited(neighboor);
 	}
 	
@@ -29,12 +29,12 @@ public class SearchTreeLeaf extends Cell {
 		SearchTreeLeaf leftLeaf;
 		
 		if (x == 0){
-			leftLeaf = tree[x][y];
+			leftLeaf = null;
 			rightLeaf = tree[x+1][y];
 		}
 		else if (x == p.numOfBots-1){
 			leftLeaf = tree[x-1][y];
-			rightLeaf = tree[x][y];
+			rightLeaf = null;
 		}
 		else{
 			rightLeaf = tree[x+1][y];
@@ -44,10 +44,10 @@ public class SearchTreeLeaf extends Cell {
 		
 		if (y == 0){
 			topLeaf = tree[x][y+1];
-			botLeaf = tree[x][y];					
+			botLeaf = null;					
 		}
 		else if (y == p.numOfBots-1){
-			topLeaf = tree[x][y];
+			topLeaf = null;
 			botLeaf = tree[x][y-1];					
 		}
 		else{
@@ -84,28 +84,31 @@ public class SearchTreeLeaf extends Cell {
 	
 	public void markVisited(){
 		visited = true;
-		sign = "0";
+		sign = "X";
 	}
 	
 	public void markVisited(SearchTreeLeaf _father){
-		visited = true;
-		sign = "*";
-		father = _father;
 		
-		/*
+		if (!visited){
+			visited = true;
+			//sign = "*";
+			father = _father;
+			
+			/*
+			BUUUUUUUUUUUUUUG
+			if (_father.xPos > xPos){
+				father.sign = "←";
+			} else if (_father.xPos < xPos){
+				father.sign = "→";
+			}else if (_father.yPos > yPos){
+				father.sign = "↓";
+			} else if (_father.yPos < yPos){
+				father.sign = "↑";
+			}
+			
+			*/
+		} 
 		
-		if (_father.xPos > xPos){
-			sign = "R";
-		} else if (_father.xPos < xPos){
-			sign = "L";
-		}
-		
-		
-		if (_father.yPos > yPos){
-			sign = "U";
-		} else if (_father.yPos < yPos){
-			sign = "D";
-		}*/
 	}
 			
 	
