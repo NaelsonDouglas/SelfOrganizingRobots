@@ -6,19 +6,30 @@ import java.util.Random;
 public class Playground {
 	
 	static int numOfBots;
-	static Bot[][] table;
-	static Bot[][] goal;
+	static Agent[][] botsTable;
+	static Spot[][] spotsTable;
+	
+	
 	static Bot[] bots;
-	static Bot[] goalHolders;
+	static Spot[] spots;
 	
 	
 	
 	public Playground(int _numOfBots){
+		numOfBots = _numOfBots;
+		botsTable = new Agent[_numOfBots][_numOfBots];
 		
-		table = new Bot[_numOfBots][_numOfBots];
-		goal = new Bot[_numOfBots][_numOfBots];
+		for (int y=0; y<_numOfBots; y++){
+			for (int x=0; x<_numOfBots; x++){
+				botsTable[x][y] = new Ground("-",x,y);
+				
+			}
+		}
+		
+		
+		
 		bots = new Bot[_numOfBots];
-		goalHolders = new Bot[_numOfBots];	
+		spots = new Spot[_numOfBots];	
 		
 		numOfBots = _numOfBots;
 		
@@ -28,15 +39,17 @@ public class Playground {
 		Random rand = new Random();
 		
 		while(placedBots < numOfBots){
+			
 			xAxis = rand.nextInt(numOfBots);
 			yAxis = rand.nextInt(numOfBots);
 			
-			if (table[xAxis][yAxis] == null){
-				Bot bot = new Bot(Integer.toString(placedBots));
+			if (botsTable[xAxis][yAxis].isGround()){
+				Bot bot = new Bot(Integer.toString(placedBots), _numOfBots);
 				bot.xPos = xAxis;
 				bot.yPos = yAxis;
-				table[xAxis][yAxis] = bot;
+				botsTable[xAxis][yAxis] = bot;
 				bots[placedBots] = bot;
+				
 				
 				placedBots++;
 			}						
@@ -46,29 +59,6 @@ public class Playground {
 	
 	
 	
-	public boolean confirmAllGoals(){
-		for (int x = 0; x < bots.length; x++){				
-			if(!bots[x].confirmGoal(goal))
-				return false;
-		}
-		return true;
-	}
-	
-	public static void printTable() {
-	    for (int y=numOfBots-1; y>=0; y--){	    	
-	    	for (int x=0; x<numOfBots; x++){
-		    	if(table[x][y] != null){
-		    		System.out.print(table[x][y].sign+"  ");
-		    	} else {
-		    		System.out.print("-  ");
-		    	}
-		    		
-		    }	
-	    	System.out.println("");
-	    }	   
-	    
-	    System.out.println("\n\n");
-	}
 	
 	
 
@@ -76,24 +66,33 @@ public class Playground {
 	
 
 	
-	public static void printGoal() {
-	    for (int y=numOfBots-1; y>=0; y--){	    	
-	    	for (int x=0; x<numOfBots; x++){
-		    	if(goal[x][y] != null){
-		    		System.out.print(goal[x][y].toString()+"  ");
-		    	} else {
-		    		System.out.print("-  ");
-		    	}
-		    		
-		    }	
+	
+	
+	private static void printTable(Cell[][] table){
+		
+		for (int y = numOfBots-1; y >= 0; y--){
+	    	for (int x = 0; x < numOfBots; x++){
+		    	System.out.print(table[x][y].toString()+"  ");
+		    }
 	    	System.out.println("");
-	    }	   
-	    
-	    System.out.println("\n\n");
+	    }
+		
+	}
+
+	
+	public static void printSpots() {
+		System.out.println("\n\n");
+		System.out.println("Possíveis alvos:");
+	    printTable(spotsTable);	
+	}
+	
+	public static void printBots() {
+		System.out.println("Posição dos robôs:");
+	    printTable(botsTable);	
 	}
 	
 	public boolean isOcupied(int x,int y){
-		if (table[x][y] != null){
+		if (botsTable[x][y] != null){
 			return true;
 		} else {
 			return false;
@@ -106,31 +105,40 @@ public class Playground {
 	public void setGoal(int[] _goal){
 		int character = 0;
 		int placedHolders = 0;
-		goal = new Bot[numOfBots][numOfBots];
+		spotsTable = new Spot[numOfBots][numOfBots];
 		
 	
 		
+		
+	    	
 		
 		
 		
 		
 		int blockSize = (int) Math.sqrt(numOfBots);
 		
-		Random rand = new Random();
-		int startingPoint = rand.nextInt(numOfBots-blockSize);
 		
 				
-		System.out.println("Starting point: "+startingPoint);
+		for (int x=0; x<numOfBots; x++){	    	
+	    	for (int y=0; y<numOfBots; y++){
+	    		spotsTable[x][y]=new Spot("-");
+	    	}
+	    	
+		}
+		
+
+		Random rand = new Random();
+		int startingPoint = rand.nextInt(numOfBots-blockSize);
 		
 		for (int x=startingPoint; x<startingPoint+blockSize; x++){	    	
 	    	for (int y=startingPoint; y<startingPoint+blockSize; y++){
 		    	
 	    		
-	    		goal[x][y]=new Bot("o");
-	    		goal[x][y].xPos=x;
-	    		goal[x][y].yPos=y;
+	    		spotsTable[x][y]=new Spot("o");
+	    		spotsTable[x][y].xPos=x;
+	    		spotsTable[x][y].yPos=y;
 	    		
-		    	goalHolders[placedHolders] = goal[x][y];
+		    	spots[placedHolders] = spotsTable[x][y];
 		    	placedHolders++;
 		    }	
 	    	System.out.println("");
@@ -139,12 +147,5 @@ public class Playground {
 		
 	}
 	
-	public Bot[][] getTable(){
-		return table;
-	}
-	
-	public Bot[][] getGoal(){
-		return goal;
-	}
 
 }
