@@ -17,6 +17,7 @@ public class Playground {
 	
 	public Playground(int _numOfBots){
 		numOfBots = _numOfBots;
+		
 		botsTable = new Agent[_numOfBots][_numOfBots];
 		
 		for (int y=0; y<_numOfBots; y++){

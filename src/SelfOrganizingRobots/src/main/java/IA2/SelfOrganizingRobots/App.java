@@ -41,7 +41,7 @@ public class App
         p.printSpots();
         
         
-        p.shitStorm();
+        
         
         System.out.println("\n");
         
