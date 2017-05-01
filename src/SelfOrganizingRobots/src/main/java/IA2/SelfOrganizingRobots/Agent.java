@@ -6,6 +6,12 @@ import java.util.Queue;
 public abstract class Agent extends Cell {
 	
 	boolean done;
+	boolean wall;
+	
+	
+	public boolean isWall(){
+		return wall;
+	}
 
 	
 	
@@ -14,6 +20,7 @@ public abstract class Agent extends Cell {
 		sign = _sign;
 		done=false;	
 		ground = false;
+		wall = false;
 		
 	}
 	

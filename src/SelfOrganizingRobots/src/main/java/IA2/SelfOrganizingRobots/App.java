@@ -20,35 +20,14 @@ public class App
     	
         
         
-        Playground p = new Playground(9);
+        Playground p = new Playground(25);
         
         p.setGoal(new int[]{0,0,1,0,0,1,0,0,0,0,1,1,0,0,0,0});
-        /*
-        
-        p.botsTable[3][0] = new Bot("1");
-        p.botsTable[3][2] = new Bot("1");
-        
-        p.botsTable[3][4] = new Bot("1");
-        p.botsTable[3][6] = new Bot("1");
-        p.botsTable[3][8] = new Bot("1");
-        
-        p.botsTable[1][0] = new Bot("1");
-        p.botsTable[1][2] = new Bot("1");
-        
-        p.botsTable[1][4] = new Bot("1");
-        p.botsTable[1][5] = new Bot("1");
-        p.botsTable[1][6] = new Bot("1");
-        p.botsTable[1][8] = new Bot("1");
         
         
-        p.botsTable[5][0] = new Bot("1");
-        p.botsTable[5][2] = new Bot("1");
+      
         
-        p.botsTable[5][4] = new Bot("1");
-        p.botsTable[5][6] = new Bot("1");
-        p.botsTable[5][8] = new Bot("1");
         
-        */
         
         
         
@@ -64,12 +43,12 @@ public class App
         
         
         
-        
+        System.out.println("\n");
         
         for (Spot spot : p.spots){
         	
         	if (!spot.foundBot){
-        		System.out.println("Spot locatoin "+spot.locationtoString());
+        		System.out.println("Spot location "+spot.locationtoString());
         		spot.callBot(p);
         	}
         	
