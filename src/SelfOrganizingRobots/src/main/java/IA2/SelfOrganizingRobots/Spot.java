@@ -60,8 +60,9 @@ public class Spot extends Agent{
 				
 				
 				if (route != null){
-					System.out.print("Robô: "+p.bots[i].toString()+" <=> ");
-					System.out.println(route+"\n");
+					//System.out.print("Robô: "+p.bots[i].toString()+" <=> ");
+					//System.out.println(route+"\n");
+					System.out.println("\n\n");
 					
 					foundBot = true;					
 					p.bots[i].done = true;
