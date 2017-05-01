@@ -58,6 +58,32 @@ public class Playground {
 	}
 	
 	
+	public void shitStorm(){
+		
+		Bot wall = new Bot("W");
+		wall.done = true;
+		wall.ground = false;
+		wall.wall= true;
+		
+		int numberOfWalls = (int) numOfBots*numOfBots/2; //25% of the table	
+		
+		int placedWalls = 0;
+		
+		
+		Random rand = new Random();
+		int x;
+		int y;
+		while (placedWalls++ < numberOfWalls){
+			x = rand.nextInt(numOfBots-1);
+			y = rand.nextInt(numOfBots-1);
+			
+			
+			if (!botsTable[x][y].isGround()){
+				botsTable[x][y] = wall;
+			}
+		}
+	}
+	
 	
 	
 	

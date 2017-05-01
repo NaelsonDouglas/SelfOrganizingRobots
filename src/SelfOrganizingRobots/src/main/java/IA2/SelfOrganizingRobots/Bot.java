@@ -196,18 +196,18 @@ private LinkedList<String> printTree(Playground p, SearchTreeLeaf tree[][], int 
 		
 		if (currentLeaf.father != null){
 			if (currentLeaf.xPos < father.xPos){ //if it's on left
-				lastMove = "←";
+				lastMove = "*";
 				currentLeaf.sign = lastMove;
 			} else if (currentLeaf.xPos > father.xPos){ //if it's on left
-				lastMove = "→";
+				lastMove = "*";
 				currentLeaf.sign = lastMove;
 			} 
 			
 			if (currentLeaf.yPos < father.yPos){ //if it's on left
-				lastMove = "↓";
+				lastMove = "*";
 				currentLeaf.sign = lastMove;
 			} else if (currentLeaf.yPos > father.yPos){ //if it's on left
-				lastMove = "↑";
+				lastMove = "*";
 				currentLeaf.sign = lastMove;
 			} 
 		}
